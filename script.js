@@ -94,14 +94,15 @@ function buildReviewFlags(typeId, sentence) {
   }
 
   return [...new Set(flags)];
-}
-
-function extractMeaning(assertions) {
+  
+}function extractMeaning(assertions) {
   const actions = [];
   const timelineSignals = [];
   const plainMeaning = assertions.length
     ? `The text contains ${assertions.length} assertion${assertions.length === 1 ? '' : 's'} that can be inspected for source, meaning, and verification paths.`
     : 'No clear assertions detected in the current text.';
+
+
 
   assertions.forEach(({ text }) => {
     if (/\b(increase|decrease|expand|reduce|fund|ban|require|allow|renew|apply|report|announce|pass)\b/i.test(text)) {
