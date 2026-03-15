@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Signal Tool Starter</title>
+  <title>Signal Tool</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,6 +14,7 @@
       <p class="subtitle">One input. Three constrained outputs: Meaning, Origin, Verification.</p>
     </header>
 
+    <section class="panel input-panel">
       <label for="inputText">Paste text</label>
       <textarea id="inputText" rows="14" placeholder="Paste article text, policy text, bill section, claim, or document excerpt here..."></textarea>
 
@@ -27,7 +29,7 @@
       <section class="panel result-panel">
         <div class="panel-header">
           <h2>Meaning</h2>
-          <p>What the text is actually asserting or doing.</p>
+          <p>What the text is actually saying in plain language.</p>
         </div>
         <div id="meaningPanel"></div>
       </section>
@@ -49,7 +51,7 @@
       </section>
 
       <details class="panel debug-panel">
-        <summary>Debug</summary>
+        <summary>Processing Trace</summary>
         <pre id="debugPanel"></pre>
       </details>
     </section>
