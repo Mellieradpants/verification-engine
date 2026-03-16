@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>verification</title>
+  <title>Verification</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -42,7 +42,7 @@
     select {
       border: 1px solid #cbd3dd;
       border-radius: 10px;
-      padding: 10px no 12px;
+      padding: 10px 12px;
       font: inherit;
       background: white;
     }
@@ -107,7 +107,7 @@
       <h1 id="titleText">Verification</h1>
       <p id="subtitleText">One input. Three constrained outputs: Meaning, Origin, Verification.</p>
 
-      <label for="inputText" id="pasteLabelk"><strong>Paste text</strong></label>
+      <label for="inputText" id="pasteLabel"><strong>Paste text</strong></label>
       <textarea id="inputText" placeholder="Paste text here..."></textarea>
 
       <div class="controls">
@@ -139,7 +139,7 @@
       </section>
 
       <section class="panel">
-        <h2 data-i18n="verificationTitle"></h2>
+        <h2 id="verificationTitle">Verification</h2>
         <div id="verificationPanel"></div>
       </section>
 
@@ -154,37 +154,31 @@
     const assertionTypes = [
       {
         id: "scientific",
-        label: "Scientific",
         recordSystems: ["PubMed", "ClinicalTrials.gov", "NIH", "FDA", "CDC"],
         signals: ["study", "trial", "medical", "clinical", "research", "journal"]
       },
       {
         id: "policy_legal",
-        label: "Policy / Legal",
         recordSystems: ["Congress.gov", "Federal Register", "CourtListener", "GovInfo"],
         signals: ["bill", "act", "law", "rule", "regulation", "section", "agency", "congress"]
       },
       {
         id: "statistical",
-        label: "Statistical",
         recordSystems: ["U.S. Census Bureau", "BLS", "BEA", "FRED", "World Bank Data"],
         signals: ["percent", "%", "rate", "increase", "decrease", "total", "count"]
       },
       {
         id: "infrastructure_energy",
-        label: "Infrastructure / Energy",
         recordSystems: ["EIA", "FERC", "NERC", "WECC", "Utility Filings"],
         signals: ["bridge", "broadband", "grid", "energy", "utility", "infrastructure", "power"]
       },
       {
         id: "predictive",
-        label: "Predictive",
         recordSystems: ["Forecast Reports", "Model Documentation", "Track Record Comparisons"],
         signals: ["will", "likely", "expected", "forecast", "projected"]
       },
       {
         id: "other",
-        label: "Other",
         recordSystems: ["Needs Human Review"],
         signals: []
       }
@@ -192,9 +186,10 @@
 
     const uiTranslations = {
       en: {
-        titleText: "verification",
+        titleText: "Verification",
         subtitleText: "One input. Three constrained outputs: Meaning, Origin, Verification.",
         pasteLabel: "Paste text",
+        inputPlaceholder: "Paste text here...",
         analyzeBtn: "Analyze",
         sampleBtn: "Load Sample",
         clearBtn: "Clear",
@@ -202,21 +197,48 @@
         originTitle: "Origin",
         verificationTitle: "Verification",
         traceTitle: "Processing Trace",
+
         plainMeaning: "Plain Meaning",
         sourceDomain: "Source Domain",
         publisher: "Publisher",
+        author: "Author",
         timestampSignal: "Timestamp Signal",
         provenanceContext: "Ownership / Provenance Context",
+        originSignals: "Origin Signals",
         assertion: "Assertion",
         expectedRecordSystems: "Expected Record Systems",
         noneDetected: "None detected",
+        noOriginSignals: "No origin signals detected.",
         noVerificationItems: "No verification items to display.",
-        noSourceUrl: "No source URL detected in text"
+        pasteSomeTextFirst: "Paste some text first.",
+
+        governmentDomain: "Government domain",
+        congressGov: "Congress.gov",
+        officialGovernmentDomain: "Official government domain",
+        nonGovernmentDomain: "Non-government domain",
+        noSourceUrl: "No source URL detected in text",
+
+        type_scientific: "Scientific",
+        type_policy_legal: "Policy / Legal",
+        type_statistical: "Statistical",
+        type_infrastructure_energy: "Infrastructure / Energy",
+        type_predictive: "Predictive",
+        type_other: "Other",
+
+        flag_verification_path_available: "verification path available",
+        flag_source_path_incomplete: "source path incomplete",
+        flag_forecast_model_needed: "forecast model needed",
+
+        noClearExplanation: "This text makes a claim but there was not enough information to explain it clearly.",
+        sampleMeaning: "The text says the federal government plans to spend money repairing bridges, expanding broadband internet, and upgrading the power grid. It also suggests these investments could reduce maintenance costs over time.",
+        textSaysPrefix: "The text says "
       },
+
       es: {
-        titleText: "Herramienta de Señales",
+        titleText: "Verificación",
         subtitleText: "Una entrada. Tres resultados limitados: Significado, Origen y Verificación.",
         pasteLabel: "Pegar texto",
+        inputPlaceholder: "Pega texto aquí...",
         analyzeBtn: "Analizar",
         sampleBtn: "Cargar ejemplo",
         clearBtn: "Borrar",
@@ -224,21 +246,48 @@
         originTitle: "Origen",
         verificationTitle: "Verificación",
         traceTitle: "Rastreo de procesamiento",
-        plainMeaning: "Significado Claro",
+
+        plainMeaning: "Significado claro",
         sourceDomain: "Dominio de origen",
         publisher: "Publicador",
+        author: "Autor",
         timestampSignal: "Señal de tiempo",
         provenanceContext: "Contexto de procedencia",
+        originSignals: "Señales de origen",
         assertion: "Afirmación",
         expectedRecordSystems: "Sistemas de registro esperados",
         noneDetected: "No detectado",
+        noOriginSignals: "No se detectaron señales de origen.",
         noVerificationItems: "No hay elementos de verificación para mostrar.",
-        noSourceUrl: "No se detectó una URL de origen en el texto"
+        pasteSomeTextFirst: "Pega texto primero.",
+
+        governmentDomain: "Dominio gubernamental",
+        congressGov: "Congress.gov",
+        officialGovernmentDomain: "Dominio gubernamental oficial",
+        nonGovernmentDomain: "Dominio no gubernamental",
+        noSourceUrl: "No se detectó una URL de origen en el texto",
+
+        type_scientific: "Científico",
+        type_policy_legal: "Política / Legal",
+        type_statistical: "Estadístico",
+        type_infrastructure_energy: "Infraestructura / Energía",
+        type_predictive: "Predictivo",
+        type_other: "Otro",
+
+        flag_verification_path_available: "ruta de verificación disponible",
+        flag_source_path_incomplete: "ruta de fuente incompleta",
+        flag_forecast_model_needed: "se necesita modelo de pronóstico",
+
+        noClearExplanation: "Este texto hace una afirmación, pero no había suficiente información para explicarlo claramente.",
+        sampleMeaning: "El texto dice que el gobierno federal planea gastar dinero en reparar puentes, ampliar el internet de banda ancha y mejorar la red eléctrica. También sugiere que estas inversiones podrían reducir los costos de mantenimiento con el tiempo.",
+        textSaysPrefix: "El texto dice "
       },
+
       ru: {
-        titleText: "Инструмент сигналов",
+        titleText: "Проверка",
         subtitleText: "Один ввод. Три ограниченных результата: Значение, Источник, Проверка.",
         pasteLabel: "Вставить текст",
+        inputPlaceholder: "Вставьте текст сюда...",
         analyzeBtn: "Анализировать",
         sampleBtn: "Загрузить пример",
         clearBtn: "Очистить",
@@ -246,21 +295,48 @@
         originTitle: "Источник",
         verificationTitle: "Проверка",
         traceTitle: "Трассировка обработки",
+
         plainMeaning: "Простое значение",
         sourceDomain: "Домен источника",
         publisher: "Издатель",
+        author: "Автор",
         timestampSignal: "Сигнал времени",
         provenanceContext: "Контекст происхождения",
+        originSignals: "Сигналы происхождения",
         assertion: "Утверждение",
         expectedRecordSystems: "Ожидаемые системы записей",
         noneDetected: "Не обнаружено",
+        noOriginSignals: "Сигналы происхождения не обнаружены.",
         noVerificationItems: "Нет элементов проверки для отображения.",
-        noSourceUrl: "URL источника в тексте не обнаружен"
+        pasteSomeTextFirst: "Сначала вставьте текст.",
+
+        governmentDomain: "Государственный домен",
+        congressGov: "Congress.gov",
+        officialGovernmentDomain: "Официальный государственный домен",
+        nonGovernmentDomain: "Негосударственный домен",
+        noSourceUrl: "URL источника в тексте не обнаружен",
+
+        type_scientific: "Научное",
+        type_policy_legal: "Политика / Право",
+        type_statistical: "Статистическое",
+        type_infrastructure_energy: "Инфраструктура / Энергетика",
+        type_predictive: "Прогнозное",
+        type_other: "Другое",
+
+        flag_verification_path_available: "путь проверки доступен",
+        flag_source_path_incomplete: "путь к источнику неполный",
+        flag_forecast_model_needed: "нужна модель прогноза",
+
+        noClearExplanation: "Этот текст содержит утверждение, но недостаточно информации, чтобы ясно его объяснить.",
+        sampleMeaning: "Текст говорит, что федеральное правительство планирует тратить деньги на ремонт мостов, расширение широкополосного интернета и модернизацию электросети. Также предполагается, что эти инвестиции могут со временем снизить расходы на обслуживание.",
+        textSaysPrefix: "Текст говорит, что "
       },
+
       zh: {
-        titleText: "信号工具",
+        titleText: "验证",
         subtitleText: "一个输入。三个受限输出：含义、来源、验证。",
         pasteLabel: "粘贴文本",
+        inputPlaceholder: "在此粘贴文本...",
         analyzeBtn: "分析",
         sampleBtn: "加载示例",
         clearBtn: "清除",
@@ -268,21 +344,48 @@
         originTitle: "来源",
         verificationTitle: "验证",
         traceTitle: "处理轨迹",
+
         plainMeaning: "简明含义",
         sourceDomain: "来源域名",
         publisher: "发布者",
+        author: "作者",
         timestampSignal: "时间信号",
         provenanceContext: "来源背景",
+        originSignals: "来源信号",
         assertion: "断言",
         expectedRecordSystems: "预期记录系统",
         noneDetected: "未检测到",
+        noOriginSignals: "未检测到来源信号。",
         noVerificationItems: "没有可显示的验证项目。",
-        noSourceUrl: "文本中未检测到来源网址"
+        pasteSomeTextFirst: "请先粘贴一些文本。",
+
+        governmentDomain: "政府域名",
+        congressGov: "Congress.gov",
+        officialGovernmentDomain: "官方政府域名",
+        nonGovernmentDomain: "非政府域名",
+        noSourceUrl: "文本中未检测到来源网址",
+
+        type_scientific: "科学",
+        type_policy_legal: "政策 / 法律",
+        type_statistical: "统计",
+        type_infrastructure_energy: "基础设施 / 能源",
+        type_predictive: "预测",
+        type_other: "其他",
+
+        flag_verification_path_available: "可用的验证路径",
+        flag_source_path_incomplete: "来源路径不完整",
+        flag_forecast_model_needed: "需要预测模型",
+
+        noClearExplanation: "这段文字提出了一个主张，但信息不足，无法清楚说明。",
+        sampleMeaning: "这段文字说明，联邦政府计划投入资金修复桥梁、扩展宽带互联网并升级电网。它还表明，这些投资可能会随着时间推移降低维护成本。",
+        textSaysPrefix: "这段文字说明"
       },
+
       uk: {
-        titleText: "Інструмент сигналів",
+        titleText: "Перевірка",
         subtitleText: "Один вхід. Три обмежені результати: Значення, Походження, Перевірка.",
         pasteLabel: "Вставити текст",
+        inputPlaceholder: "Вставте текст сюди...",
         analyzeBtn: "Аналізувати",
         sampleBtn: "Завантажити приклад",
         clearBtn: "Очистити",
@@ -290,21 +393,48 @@
         originTitle: "Походження",
         verificationTitle: "Перевірка",
         traceTitle: "Трасування обробки",
+
         plainMeaning: "Просте значення",
         sourceDomain: "Домен джерела",
         publisher: "Видавець",
+        author: "Автор",
         timestampSignal: "Сигнал часу",
         provenanceContext: "Контекст походження",
+        originSignals: "Сигнали походження",
         assertion: "Твердження",
         expectedRecordSystems: "Очікувані системи записів",
         noneDetected: "Не виявлено",
+        noOriginSignals: "Сигнали походження не виявлено.",
         noVerificationItems: "Немає елементів перевірки для відображення.",
-        noSourceUrl: "У тексті не виявлено URL джерела"
+        pasteSomeTextFirst: "Спочатку вставте текст.",
+
+        governmentDomain: "Державний домен",
+        congressGov: "Congress.gov",
+        officialGovernmentDomain: "Офіційний державний домен",
+        nonGovernmentDomain: "Недержавний домен",
+        noSourceUrl: "У тексті не виявлено URL джерела",
+
+        type_scientific: "Наукове",
+        type_policy_legal: "Політика / Право",
+        type_statistical: "Статистичне",
+        type_infrastructure_energy: "Інфраструктура / Енергетика",
+        type_predictive: "Прогнозне",
+        type_other: "Інше",
+
+        flag_verification_path_available: "шлях перевірки доступний",
+        flag_source_path_incomplete: "шлях до джерела неповний",
+        flag_forecast_model_needed: "потрібна модель прогнозу",
+
+        noClearExplanation: "Цей текст містить твердження, але недостатньо інформації, щоб чітко його пояснити.",
+        sampleMeaning: "Текст говорить, що федеральний уряд планує витрачати кошти на ремонт мостів, розширення широкосмугового інтернету та модернізацію електромережі. Також припускається, що ці інвестиції з часом можуть зменшити витрати на обслуговування.",
+        textSaysPrefix: "Текст говорить, що "
       },
+
       ht: {
-        titleText: "Zouti Siyal",
+        titleText: "Verifikasyon",
         subtitleText: "Yon sèl antre. Twa rezilta limite: Siyifikasyon, Orijin, Verifikasyon.",
         pasteLabel: "Kole tèks",
+        inputPlaceholder: "Kole tèks isit la...",
         analyzeBtn: "Analize",
         sampleBtn: "Chaje egzanp",
         clearBtn: "Efase",
@@ -312,21 +442,48 @@
         originTitle: "Orijin",
         verificationTitle: "Verifikasyon",
         traceTitle: "Tras pwosesis",
+
         plainMeaning: "Sans klè",
         sourceDomain: "Domèn sous",
         publisher: "Piblikatè",
+        author: "Otè",
         timestampSignal: "Siyal tan",
         provenanceContext: "Kontèks pwovens",
+        originSignals: "Siyal orijin",
         assertion: "Deklarasyon",
         expectedRecordSystems: "Sistèm dosye yo espere",
         noneDetected: "Pa detekte",
+        noOriginSignals: "Pa gen siyal orijin detekte.",
         noVerificationItems: "Pa gen eleman verifikasyon pou montre.",
-        noSourceUrl: "Pa gen URL sous detekte nan tèks la"
+        pasteSomeTextFirst: "Kole kèk tèks anvan.",
+
+        governmentDomain: "Domèn gouvènman",
+        congressGov: "Congress.gov",
+        officialGovernmentDomain: "Domèn ofisyèl gouvènman",
+        nonGovernmentDomain: "Domèn ki pa gouvènman",
+        noSourceUrl: "Pa gen URL sous detekte nan tèks la",
+
+        type_scientific: "Syantifik",
+        type_policy_legal: "Politik / Legal",
+        type_statistical: "Estatistik",
+        type_infrastructure_energy: "Enfrastrikti / Enèji",
+        type_predictive: "Prediktif",
+        type_other: "Lòt",
+
+        flag_verification_path_available: "chemen verifikasyon disponib",
+        flag_source_path_incomplete: "chemen sous la pa konplè",
+        flag_forecast_model_needed: "yo bezwen yon modèl previzyon",
+
+        noClearExplanation: "Tèks sa a fè yon deklarasyon men pa gen ase enfòmasyon pou eksplike li klèman.",
+        sampleMeaning: "Tèks la di gouvènman federal la planifye depanse lajan pou repare pon, elaji entènèt bande laj, epi amelyore rezo elektrisite a. Li sijere tou ke envestisman sa yo ta ka diminye depans antretyen ak tan.",
+        textSaysPrefix: "Tèks la di "
       },
+
       so: {
-        titleText: "Qalabka Calaamadaha",
+        titleText: "Xaqiijin",
         subtitleText: "Hal gelin. Saddex natiijo oo xaddidan: Macne, Asal, Xaqiijin.",
         pasteLabel: "Ku dheji qoraal",
+        inputPlaceholder: "Halkan ku dheji qoraalka...",
         analyzeBtn: "Falanqee",
         sampleBtn: "Soo rar tusaale",
         clearBtn: "Nadiifi",
@@ -334,22 +491,59 @@
         originTitle: "Asal",
         verificationTitle: "Xaqiijin",
         traceTitle: "Raadka habaynta",
-        plainMeaning: "Macne Fudud",
+
+        plainMeaning: "Macne fudud",
         sourceDomain: "Domain-ka isha",
         publisher: "Daabacaha",
+        author: "Qoraaga",
         timestampSignal: "Calaamadda waqtiga",
         provenanceContext: "Macnaha asalka",
+        originSignals: "Calaamadaha asalka",
         assertion: "Sheegasho",
         expectedRecordSystems: "Nidaamyada diiwaanka la filayo",
         noneDetected: "Lama helin",
+        noOriginSignals: "Calaamado asal ah lama helin.",
         noVerificationItems: "Ma jiraan walxo xaqiijin oo la muujiyo.",
-        noSourceUrl: "URL isha lagama helin qoraalka"
+        pasteSomeTextFirst: "Marka hore ku dheji qoraal.",
+
+        governmentDomain: "Domain dowladeed",
+        congressGov: "Congress.gov",
+        officialGovernmentDomain: "Domain dowladeed rasmi ah",
+        nonGovernmentDomain: "Domain aan dowladeed ahayn",
+        noSourceUrl: "URL isha lagama helin qoraalka",
+
+        type_scientific: "Cilmiyeed",
+        type_policy_legal: "Siyaasad / Sharci",
+        type_statistical: "Tirokoob",
+        type_infrastructure_energy: "Kaabayaal / Tamarta",
+        type_predictive: "Saadaalin",
+        type_other: "Kale",
+
+        flag_verification_path_available: "jid xaqiijin waa la heli karaa",
+        flag_source_path_incomplete: "jidka isha waa uusan dhammayn",
+        flag_forecast_model_needed: "waxaa loo baahan yahay moodel saadaal",
+
+        noClearExplanation: "Qoraalkani wuxuu sameynayaa sheegasho laakiin macluumaad ku filan ma jiro si si cad loo sharaxo.",
+        sampleMeaning: "Qoraalku wuxuu sheegayaa in dowladda federaalku qorshaynayso inay lacag ku bixiso dayactirka buundooyinka, ballaarinta internet-ka broadband-ka, iyo hagaajinta shabakadda korontada. Waxa kale oo uu soo jeedinayaa in maalgelintani ay hoos u dhigi karto kharashaadka dayactirka mustaqbalka.",
+        textSaysPrefix: "Qoraalku wuxuu sheegayaa in "
       }
     };
 
+    function currentLang() {
+      return document.getElementById("languageSelect").value || "en";
+    }
+
     function t(key) {
-      const lang = document.getElementById("languageSelect").value || "en";
+      const lang = currentLang();
       return (uiTranslations[lang] && uiTranslations[lang][key]) || uiTranslations.en[key] || key;
+    }
+
+    function getTypeLabel(typeId) {
+      return t(`type_${typeId}`);
+    }
+
+    function getFlagLabel(flagId) {
+      return t(`flag_${flagId}`);
     }
 
     function splitSentences(text) {
@@ -363,6 +557,7 @@
         /\baccording to\b/i,
         /\bsection\b/i
       ];
+
       return sentences.filter(sentence => {
         if (sentence.length < 18) return false;
         return markers.some(rx => rx.test(sentence));
@@ -370,34 +565,16 @@
     }
 
     function generatePlainMeaning(text) {
-      const lang = document.getElementById("languageSelect").value || "en";
+      const lang = currentLang();
 
       if (!text) {
-        const emptyMap = {
-          en: "This text makes a claim but there was not enough information to explain it clearly.",
-          es: "Este texto hace una afirmación, pero no había suficiente información para explicarlo claramente.",
-          ru: "Этот текст содержит утверждение, но недостаточно информации, чтобы ясно его объяснить.",
-          zh: "这段文字提出了一个主张，但信息不足，无法清楚说明。",
-          uk: "Цей текст містить твердження, але недостатньо інформації, щоб чітко його пояснити.",
-          ht: "Tèks sa a fè yon deklarasyon men pa gen ase enfòmasyon pou eksplike li klèman.",
-          so: "Qoraalkani wuxuu sameynayaa sheegasho laakiin macluumaad ku filan ma jiro si si cad loo sharaxo."
-        };
-        return emptyMap[lang] || emptyMap.en;
+        return t("noClearExplanation");
       }
 
       const lower = text.toLowerCase();
 
       if (lower.includes("bridge") && lower.includes("broadband") && lower.includes("grid")) {
-        const sampleMap = {
-          en: "The text says the federal government plans to spend money repairing bridges, expanding broadband internet, and upgrading the power grid. It also suggests these investments could reduce maintenance costs over time.",
-          es: "El texto dice que el gobierno federal planea gastar dinero en reparar puentes, ampliar el internet de banda ancha y mejorar la red eléctrica. También sugiere que estas inversiones podrían reducir los costos de mantenimiento con el tiempo.",
-          ru: "Текст говорит, что федеральное правительство планирует тратить деньги на ремонт мостов, расширение широкополосного интернета и модернизацию электросети. Также предполагается, что эти инвестиции могут со временем снизить расходы на обслуживание.",
-          zh: "这段文字说明，联邦政府计划投入资金修复桥梁、扩展宽带互联网并升级电网。它还表明，这些投资可能会随着时间推移降低维护成本。",
-          uk: "Текст говорить, що федеральний уряд планує витрачати кошти на ремонт мостів, розширення широкосмугового інтернету та модернізацію електромережі. Також припускається, що ці інвестиції з часом можуть зменшити витрати на обслуговування.",
-          ht: "Tèks la di gouvènman federal la planifye depanse lajan pou repare pon, elaji entènèt bande laj, epi amelyore rezo elektrisite a. Li sijere tou ke envestisman sa yo ta ka diminye depans antretyen ak tan.",
-          so: "Qoraalku wuxuu sheegayaa in dowladda federaalku qorshaynayso inay lacag ku bixiso dayactirka buundooyinka, ballaarinta internet-ka broadband-ka, iyo hagaajinta shabakadda korontada. Waxa kale oo uu soo jeedinayaa in maalgelintani ay hoos u dhigi karto kharashaadka dayactirka mustaqbalka."
-        };
-        return sampleMap[lang] || sampleMap.en;
+        return t("sampleMeaning");
       }
 
       const sentences = text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
@@ -417,8 +594,16 @@
       summary = summary.replace(/\bstructurally deficient\b/gi, "in poor condition");
       summary = summary.replace(/\s+/g, " ").trim();
 
-      if (!summary.toLowerCase().startsWith("the text")) {
-        summary = "The text says " + summary.charAt(0).toLowerCase() + summary.slice(1);
+      if (lang === "zh") {
+        if (!summary.startsWith("这段文字")) {
+          summary = t("textSaysPrefix") + summary;
+        }
+      } else {
+        const starts = ["the text", "el texto", "текст", "цей текст", "цей текст", "tèks", "qoraalku"];
+        const summaryLower = summary.toLowerCase();
+        if (!starts.some(s => summaryLower.startsWith(s))) {
+          summary = t("textSaysPrefix") + summary.charAt(0).toLowerCase() + summary.slice(1);
+        }
       }
 
       return summary;
@@ -448,15 +633,19 @@
 
     function buildFlags(typeId, sentence) {
       const flags = [];
+
       if (!/\b(according to|report|study|section|act|bill|court|agency|department|published)\b/i.test(sentence)) {
         flags.push("source_path_incomplete");
       }
+
       if (typeId === "predictive") {
         flags.push("forecast_model_needed");
       }
+
       if (!flags.length) {
         flags.push("verification_path_available");
       }
+
       return flags;
     }
 
@@ -473,9 +662,19 @@
           const url = new URL(urlMatch[0]);
           sourceDomain = url.hostname;
           originSignals.push("source_url:" + url.hostname);
-          if (url.hostname.includes(".gov")) publisher = "Government domain";
-          if (url.hostname.includes("congress.gov")) publisher = "Congress.gov";
+
+          if (url.hostname.includes("congress.gov")) {
+            publisher = t("congressGov");
+          } else if (url.hostname.includes(".gov")) {
+            publisher = t("governmentDomain");
+          }
         } catch (_) {}
+      }
+
+      const authorMatch = text.match(/\bby\s+([A-Z][A-Za-z.\- ]{2,60})/);
+      if (authorMatch) {
+        author = authorMatch[1].trim();
+        originSignals.push("author_text:" + author);
       }
 
       const timeMatch = text.match(/\b((19|20)\d{2}|January|February|March|April|May|June|July|August|September|October|November|December)\b/i);
@@ -490,9 +689,9 @@
         author,
         timestamp,
         ownershipContext: sourceDomain.includes(".gov")
-          ? "Official government domain"
+          ? t("officialGovernmentDomain")
           : sourceDomain
-          ? "Non-government domain"
+          ? t("nonGovernmentDomain")
           : t("noSourceUrl"),
         originSignals
       };
@@ -500,17 +699,18 @@
 
     function escapeHtml(str) {
       return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
     function updateStaticUI() {
       document.getElementById("titleText").textContent = t("titleText");
       document.getElementById("subtitleText").textContent = t("subtitleText");
-      document.getElementById("pasteLabel").innerHTML = "<strong>" + t("pasteLabel") + "</strong>";
+      document.getElementById("pasteLabel").innerHTML = "<strong>" + escapeHtml(t("pasteLabel")) + "</strong>";
+      document.getElementById("inputText").placeholder = t("inputPlaceholder");
       document.getElementById("analyzeBtn").textContent = t("analyzeBtn");
       document.getElementById("sampleBtn").textContent = t("sampleBtn");
       document.getElementById("clearBtn").textContent = t("clearBtn");
@@ -524,7 +724,7 @@
       const rawText = document.getElementById("inputText").value.trim();
 
       if (!rawText) {
-        alert("Paste some text first.");
+        alert(t("pasteSomeTextFirst"));
         return;
       }
 
@@ -548,12 +748,24 @@
         <p>${escapeHtml(origin.publisher || t("noneDetected"))}</p>
       </div>
       <div class="card">
+        <div class="small-label">${escapeHtml(t("author"))}</div>
+        <p>${escapeHtml(origin.author || t("noneDetected"))}</p>
+      </div>
+      <div class="card">
         <div class="small-label">${escapeHtml(t("timestampSignal"))}</div>
         <p>${escapeHtml(origin.timestamp || t("noneDetected"))}</p>
       </div>
       <div class="card">
         <div class="small-label">${escapeHtml(t("provenanceContext"))}</div>
         <p>${escapeHtml(origin.ownershipContext)}</p>
+      </div>
+      <div class="card">
+        <div class="small-label">${escapeHtml(t("originSignals"))}</div>
+        ${
+          origin.originSignals.length
+            ? `<ul>${origin.originSignals.map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+            : `<p>${escapeHtml(t("noOriginSignals"))}</p>`
+        }
       </div>`;
 
       document.getElementById("verificationPanel").innerHTML =
@@ -561,13 +773,14 @@
       ? assertions.map(text => {
           const type = classifyAssertion(text);
           const flags = buildFlags(type.id, text);
+
           return `
           <div class="card">
             <div class="small-label">${escapeHtml(t("assertion"))}</div>
             <p>${escapeHtml(text)}</p>
             <div class="badge-row">
-              <span class="badge type">${escapeHtml(type.label)}</span>
-              ${flags.map(f => `<span class="badge flag">${escapeHtml(f)}</span>`).join("")}
+              <span class="badge type">${escapeHtml(getTypeLabel(type.id))}</span>
+              ${flags.map(f => `<span class="badge flag">${escapeHtml(getFlagLabel(f))}</span>`).join("")}
             </div>
             <div class="small-label">${escapeHtml(t("expectedRecordSystems"))}</div>
             <ul>${type.recordSystems.map(r => `<li>${escapeHtml(r)}</li>`).join("")}</ul>
@@ -580,7 +793,7 @@
         sentencesSplit: sentences.length,
         candidateAssertions: assertions.length,
         assertionsReturned: assertions.length,
-        inputPreview: rawText.slice(0,220)
+        inputPreview: rawText.slice(0, 220)
       }, null, 2);
 
       document.getElementById("results").classList.remove("hidden");
