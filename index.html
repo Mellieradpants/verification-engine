@@ -194,8 +194,9 @@
         return markers.some(rx => rx.test(sentence));
       });
     }
-
-    function generatePlainMeaning(text) {
+clearly.";
+      }
+function generatePlainMeaning(text) {
       if (!text) {
         return "This text makes a claim, but there was not enough information to summarize it clearly.";
       }
@@ -212,9 +213,7 @@
         .filter(Boolean);
 
       if (sentences.length === 0) {
-        return "This text makes a claim, but there was not enough information to summarize it clearly.";
-      }
-
+        return "This text makes a claim, but there was not enough information to summarize it 
 
     function classifyAssertion(sentence) {
       const lower = sentence.toLowerCase();
