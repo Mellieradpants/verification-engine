@@ -2,53 +2,43 @@ let LIBRARY = null;
 let currentLanguage = "en";
 const translationCache = new Map();
 
-const uiTranslations = {
-  en: {
-    plainMeaningLabel: "Plain Meaning",
-    detectedAssertionsLabel: "Detected Assertions",
-    actionSignalsLabel: "Action Signals",
-    timelineSignalsLabel: "Timeline Signals",
-    sourceDomainLabel: "Source Domain",
-    publisherLabel: "Publisher",
-    authorLabel: "Author",
-    timestampSignalLabel: "Timestamp Signal",
-    ownershipContextLabel: "Ownership / Provenance Context",
-    originSignalsLabel: "Origin Signals",
-    assertionLabel: "Assertion",
-    expectedRecordSystemsLabel: "Expected Record Systems",
-    notesLabel: "Notes",
-
-    noneDetected: "None detected.",
-    noAssertionsDetected: "No assertions detected.",
-    noActionSignalsDetected: "No action signals detected.",
-    noTimelineSignalsDetected: "No timeline signals detected.",
-    noOriginSignalsDetected: "No origin signals detected.",
-    noVerificationItems: "No verification items to display.",
-    pasteTextFirst: "Paste some text first.",
-
-    debugSentencesSplit: "Sentences Split",
-    debugCandidateAssertions: "Candidate Assertions",
-    debugAssertionsReturned: "Assertions Returned",
-    debugInputPreview: "Input Preview",
-
-    noClearExplanation:
-      "This text makes a claim but there was not enough information to explain it clearly.",
-    bridgeSummary:
-      "The text says the federal government plans to spend money repairing bridges, expanding broadband internet, and upgrading the power grid. It also says these investments may reduce maintenance costs over time.",
-    textSaysPrefix: "The text says ",
-
-    governmentDomain: "Government domain",
-    academicDomain: "Academic domain",
-    congressGov: "Congress.gov",
-    officialGovernmentDomain: "Official government domain",
-    nonGovernmentDomain: "Non-government domain",
-    noSourceUrl: "No source URL detected in text"
-  }
+const EN_LABELS = {
+  plainMeaningLabel: "Plain Meaning",
+  detectedAssertionsLabel: "Detected Assertions",
+  actionSignalsLabel: "Action Signals",
+  timelineSignalsLabel: "Timeline Signals",
+  sourceDomainLabel: "Source Domain",
+  publisherLabel: "Publisher",
+  authorLabel: "Author",
+  timestampSignalLabel: "Timestamp Signal",
+  ownershipContextLabel: "Ownership / Provenance Context",
+  originSignalsLabel: "Origin Signals",
+  assertionLabel: "Assertion",
+  expectedRecordSystemsLabel: "Expected Record Systems",
+  notesLabel: "Notes",
+  noneDetected: "None detected.",
+  noAssertionsDetected: "No assertions detected.",
+  noActionSignalsDetected: "No action signals detected.",
+  noTimelineSignalsDetected: "No timeline signals detected.",
+  noOriginSignalsDetected: "No origin signals detected.",
+  noVerificationItems: "No verification items to display.",
+  pasteTextFirst: "Paste some text first.",
+  debugSentencesSplit: "Sentences Split",
+  debugCandidateAssertions: "Candidate Assertions",
+  debugAssertionsReturned: "Assertions Returned",
+  debugInputPreview: "Input Preview",
+  noClearExplanation:
+    "This text makes a claim but there was not enough information to explain it clearly.",
+  bridgeSummary:
+    "The text says the federal government plans to spend money repairing bridges, expanding broadband internet, and upgrading the power grid. It also says these investments may reduce maintenance costs over time.",
+  textSaysPrefix: "The text says ",
+  governmentDomain: "Government domain",
+  academicDomain: "Academic domain",
+  congressGov: "Congress.gov",
+  officialGovernmentDomain: "Official government domain",
+  nonGovernmentDomain: "Non-government domain",
+  noSourceUrl: "No source URL detected in text"
 };
-
-function t(key) {
-  return uiTranslations[currentLanguage]?.[key] || uiTranslations.en[key] || key;
-}
 
 function syncLanguageFromUI() {
   const langSelect = document.getElementById("languageSelect");
@@ -66,30 +56,40 @@ async function translateText(text, language = currentLanguage) {
     return translationCache.get(cacheKey);
   }
 
-  const response = await fetch("/api/analyze-and-translate", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      text,
-      language
-    })
-  });
+  try {
+    const response = await fetch("/api/analyze-and-translate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        text,
+        language
+      })
+    });
 
-  if (!response.ok) {
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Translation API error:", data);
+      return text;
+    }
+
+    const translated = data.translated || text;
+    translationCache.set(cacheKey, translated);
+    return translated;
+  } catch (error) {
+    console.error("Translation fetch failed:", error);
     return text;
   }
-
-  const data = await response.json();
-  const translated = data.translated || text;
-  translationCache.set(cacheKey, translated);
-  return translated;
 }
 
 async function translateList(items, language = currentLanguage) {
-  const translated = await Promise.all(items.map(item => translateText(item, language)));
-  return translated;
+  return Promise.all((items || []).map(item => translateText(item, language)));
+}
+
+async function t(key) {
+  return translateText(EN_LABELS[key] || key, currentLanguage);
 }
 
 async function loadLibrary() {
@@ -130,7 +130,7 @@ function detectAssertions(sentences) {
 
 function generatePlainMeaning(text) {
   if (!text) {
-    return t("noClearExplanation");
+    return EN_LABELS.noClearExplanation;
   }
 
   const lower = text.toLowerCase();
@@ -140,7 +140,7 @@ function generatePlainMeaning(text) {
     lower.includes("broadband") &&
     lower.includes("grid")
   ) {
-    return t("bridgeSummary");
+    return EN_LABELS.bridgeSummary;
   }
 
   const sentences = text
@@ -158,7 +158,7 @@ function generatePlainMeaning(text) {
   summary = summary.replace(/\s+/g, " ").trim();
 
   if (!summary.toLowerCase().startsWith("the text")) {
-    summary = t("textSaysPrefix") + summary.charAt(0).toLowerCase() + summary.slice(1);
+    summary = EN_LABELS.textSaysPrefix + summary.charAt(0).toLowerCase() + summary.slice(1);
   }
 
   return summary;
@@ -266,9 +266,9 @@ function extractOrigin(rawText) {
       const url = new URL(urlMatch[0]);
       sourceDomain = url.hostname;
       originSignals.push(`source_url:${url.hostname}`);
-      if (url.hostname.includes(".gov")) publisher = t("governmentDomain");
-      if (url.hostname.includes(".edu")) publisher = t("academicDomain");
-      if (url.hostname.includes("congress.gov")) publisher = t("congressGov");
+      if (url.hostname.includes(".gov")) publisher = EN_LABELS.governmentDomain;
+      if (url.hostname.includes(".edu")) publisher = EN_LABELS.academicDomain;
+      if (url.hostname.includes("congress.gov")) publisher = EN_LABELS.congressGov;
     } catch (_) {}
   }
 
@@ -296,12 +296,12 @@ function extractOrigin(rawText) {
     author,
     timestamp,
     ownershipContext: sourceDomain.includes(".gov")
-      ? t("officialGovernmentDomain")
+      ? EN_LABELS.officialGovernmentDomain
       : sourceDomain.includes(".edu")
-      ? t("academicDomain")
+      ? EN_LABELS.academicDomain
       : sourceDomain
-      ? t("nonGovernmentDomain")
-      : t("noSourceUrl"),
+      ? EN_LABELS.nonGovernmentDomain
+      : EN_LABELS.noSourceUrl,
     originSignals
   };
 }
@@ -346,135 +346,167 @@ async function localizeOrigin(origin) {
   return {
     ...origin,
     publisher: await translateText(origin.publisher),
-    ownershipContext: await translateText(origin.ownershipContext)
+    ownershipContext: await translateText(origin.ownershipContext),
+    originSignals: origin.originSignals
   };
 }
 
 async function localizeVerification(items) {
   return Promise.all(
-    items.map(async item => ({
-      ...item,
-      displayText: await translateText(item.text),
-      displayTypeLabel: await translateText(item.typeLabel),
-      displayFlags: await translateList(item.reviewFlags.map(flag => flag.replaceAll("_", " "))),
-      displayRecordSystems: await translateList(item.recordSystems),
-      displayNotes: await translateText(item.notes)
-    }))
+    items.map(async item => {
+      const displayText = await translateText(item.text);
+      const displayTypeLabel = await translateText(item.typeLabel);
+      const displayFlags = await translateList(
+        item.reviewFlags.map(flag => flag.replaceAll("_", " "))
+      );
+      const displayRecordSystems = await translateList(item.recordSystems);
+      const displayNotes = await translateText(item.notes);
+
+      return {
+        ...item,
+        displayText,
+        displayTypeLabel,
+        displayFlags,
+        displayRecordSystems,
+        displayNotes
+      };
+    })
   );
 }
 
-function renderMeaning(meaning) {
+async function renderMeaning(meaning) {
   const panel = document.getElementById("meaningPanel");
+
+  const noAssertionsDetected = await t("noAssertionsDetected");
+  const noActionSignalsDetected = await t("noActionSignalsDetected");
+  const noTimelineSignalsDetected = await t("noTimelineSignalsDetected");
+  const plainMeaningLabel = await t("plainMeaningLabel");
+  const detectedAssertionsLabel = await t("detectedAssertionsLabel");
+  const actionSignalsLabel = await t("actionSignalsLabel");
+  const timelineSignalsLabel = await t("timelineSignalsLabel");
 
   const assertionsHtml = meaning.assertions.length
     ? `<ul class="list">${meaning.assertions.map(a => `<li>${escapeHtml(a)}</li>`).join("")}</ul>`
-    : `<p class="empty">${escapeHtml(t("noAssertionsDetected"))}</p>`;
+    : `<p class="empty">${escapeHtml(noAssertionsDetected)}</p>`;
 
   const actionsHtml = meaning.actions.length
     ? `<ul class="list">${meaning.actions.map(a => `<li>${escapeHtml(a)}</li>`).join("")}</ul>`
-    : `<p class="empty">${escapeHtml(t("noActionSignalsDetected"))}</p>`;
+    : `<p class="empty">${escapeHtml(noActionSignalsDetected)}</p>`;
 
   const timelineHtml = meaning.timelineSignals.length
     ? `<ul class="list">${meaning.timelineSignals.map(tl => `<li>${escapeHtml(tl)}</li>`).join("")}</ul>`
-    : `<p class="empty">${escapeHtml(t("noTimelineSignalsDetected"))}</p>`;
+    : `<p class="empty">${escapeHtml(noTimelineSignalsDetected)}</p>`;
 
   panel.innerHTML = `
     <div class="card">
-      <div class="small-label">${escapeHtml(t("plainMeaningLabel"))}</div>
+      <div class="small-label">${escapeHtml(plainMeaningLabel)}</div>
       <p>${escapeHtml(meaning.plainMeaning)}</p>
     </div>
 
     <div class="card">
-      <div class="small-label">${escapeHtml(t("detectedAssertionsLabel"))}</div>
+      <div class="small-label">${escapeHtml(detectedAssertionsLabel)}</div>
       ${assertionsHtml}
     </div>
 
     <div class="card">
-      <div class="small-label">${escapeHtml(t("actionSignalsLabel"))}</div>
+      <div class="small-label">${escapeHtml(actionSignalsLabel)}</div>
       ${actionsHtml}
     </div>
 
     <div class="card">
-      <div class="small-label">${escapeHtml(t("timelineSignalsLabel"))}</div>
+      <div class="small-label">${escapeHtml(timelineSignalsLabel)}</div>
       ${timelineHtml}
     </div>
   `;
 }
 
-function renderOrigin(origin) {
+async function renderOrigin(origin) {
   const panel = document.getElementById("originPanel");
+
+  const sourceDomainLabel = await t("sourceDomainLabel");
+  const publisherLabel = await t("publisherLabel");
+  const authorLabel = await t("authorLabel");
+  const timestampSignalLabel = await t("timestampSignalLabel");
+  const ownershipContextLabel = await t("ownershipContextLabel");
+  const originSignalsLabel = await t("originSignalsLabel");
+  const noneDetected = await t("noneDetected");
+  const noOriginSignalsDetected = await t("noOriginSignalsDetected");
 
   panel.innerHTML = `
     <div class="card">
-      <div class="small-label">${escapeHtml(t("sourceDomainLabel"))}</div>
-      <p>${escapeHtml(origin.sourceDomain || t("noneDetected"))}</p>
+      <div class="small-label">${escapeHtml(sourceDomainLabel)}</div>
+      <p>${escapeHtml(origin.sourceDomain || noneDetected)}</p>
     </div>
     <div class="card">
-      <div class="small-label">${escapeHtml(t("publisherLabel"))}</div>
-      <p>${escapeHtml(origin.publisher || t("noneDetected"))}</p>
+      <div class="small-label">${escapeHtml(publisherLabel)}</div>
+      <p>${escapeHtml(origin.publisher || noneDetected)}</p>
     </div>
     <div class="card">
-      <div class="small-label">${escapeHtml(t("authorLabel"))}</div>
-      <p>${escapeHtml(origin.author || t("noneDetected"))}</p>
+      <div class="small-label">${escapeHtml(authorLabel)}</div>
+      <p>${escapeHtml(origin.author || noneDetected)}</p>
     </div>
     <div class="card">
-      <div class="small-label">${escapeHtml(t("timestampSignalLabel"))}</div>
-      <p>${escapeHtml(origin.timestamp || t("noneDetected"))}</p>
+      <div class="small-label">${escapeHtml(timestampSignalLabel)}</div>
+      <p>${escapeHtml(origin.timestamp || noneDetected)}</p>
     </div>
     <div class="card">
-      <div class="small-label">${escapeHtml(t("ownershipContextLabel"))}</div>
+      <div class="small-label">${escapeHtml(ownershipContextLabel)}</div>
       <p>${escapeHtml(origin.ownershipContext)}</p>
     </div>
     <div class="card">
-      <div class="small-label">${escapeHtml(t("originSignalsLabel"))}</div>
+      <div class="small-label">${escapeHtml(originSignalsLabel)}</div>
       ${
         origin.originSignals.length
           ? `<ul class="list">${origin.originSignals.map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-          : `<p class="empty">${escapeHtml(t("noOriginSignalsDetected"))}</p>`
+          : `<p class="empty">${escapeHtml(noOriginSignalsDetected)}</p>`
       }
     </div>
   `;
 }
 
-function renderVerification(items) {
+async function renderVerification(items) {
   const panel = document.getElementById("verificationPanel");
 
+  const noVerificationItems = await t("noVerificationItems");
+  const assertionLabel = await t("assertionLabel");
+  const expectedRecordSystemsLabel = await t("expectedRecordSystemsLabel");
+  const notesLabel = await t("notesLabel");
+
   if (!items.length) {
-    panel.innerHTML = `<p class="empty">${escapeHtml(t("noVerificationItems"))}</p>`;
+    panel.innerHTML = `<p class="empty">${escapeHtml(noVerificationItems)}</p>`;
     return;
   }
 
   panel.innerHTML = items.map(item => `
     <div class="card">
-      <div class="small-label">${escapeHtml(t("assertionLabel"))}</div>
+      <div class="small-label">${escapeHtml(assertionLabel)}</div>
       <p>${escapeHtml(item.displayText || item.text)}</p>
+
       <div class="badge-row">
         <span class="badge type">${escapeHtml(item.displayTypeLabel || item.typeLabel)}</span>
         ${(item.displayFlags || item.reviewFlags).map(f => `<span class="badge flag">${escapeHtml(f)}</span>`).join("")}
       </div>
 
-      <div class="small-label">${escapeHtml(t("expectedRecordSystemsLabel"))}</div>
+      <div class="small-label">${escapeHtml(expectedRecordSystemsLabel)}</div>
       <ul class="list">${(item.displayRecordSystems || item.recordSystems).map(r => `<li>${escapeHtml(r)}</li>`).join("")}</ul>
 
-      <div class="small-label">${escapeHtml(t("notesLabel"))}</div>
+      <div class="small-label">${escapeHtml(notesLabel)}</div>
       <p>${escapeHtml(item.displayNotes || item.notes)}</p>
     </div>
   `).join("");
 }
 
 async function renderDebug(debug) {
-  const translatedLabels = {
-    sentencesSplit: await translateText(t("debugSentencesSplit")),
-    candidateAssertions: await translateText(t("debugCandidateAssertions")),
-    assertionsReturned: await translateText(t("debugAssertionsReturned")),
-    inputPreview: await translateText(t("debugInputPreview"))
-  };
+  const sentencesSplit = await t("debugSentencesSplit");
+  const candidateAssertions = await t("debugCandidateAssertions");
+  const assertionsReturned = await t("debugAssertionsReturned");
+  const inputPreview = await t("debugInputPreview");
 
   document.getElementById("debugPanel").textContent = `{
-  "${translatedLabels.sentencesSplit}": ${debug.sentencesSplit},
-  "${translatedLabels.candidateAssertions}": ${debug.candidateAssertions},
-  "${translatedLabels.assertionsReturned}": ${debug.assertionsReturned},
-  "${translatedLabels.inputPreview}": "${debug.inputPreview}"
+  "${sentencesSplit}": ${debug.sentencesSplit},
+  "${candidateAssertions}": ${debug.candidateAssertions},
+  "${assertionsReturned}": ${debug.assertionsReturned},
+  "${inputPreview}": "${debug.inputPreview}"
 }`;
 }
 
@@ -494,7 +526,7 @@ async function analyze() {
   const input = normalizeInput(document.getElementById("inputText").value);
 
   if (!input.rawText) {
-    alert(t("pasteTextFirst"));
+    alert(await t("pasteTextFirst"));
     return;
   }
 
@@ -505,22 +537,13 @@ async function analyze() {
   let origin = extractOrigin(input.rawText);
   let verification = runVerification(assertionTexts, library);
 
-  // translate meaning
-meaning.plainMeaning = await translateText(meaning.plainMeaning);
-meaning.assertions = await translateList(meaning.assertions);
-meaning.actions = await translateList(meaning.actions);
+  meaning = await localizeMeaning(meaning);
+  origin = await localizeOrigin(origin);
+  verification = await localizeVerification(verification);
 
-// translate verification
-verification = await localizeVerification(verification);
-
-// translate origin
-origin.publisher = await translateText(origin.publisher);
-origin.ownershipContext = await translateText(origin.ownershipContext);
-  
-
-  renderMeaning(meaning);
-  renderOrigin(origin);
-  renderVerification(verification);
+  await renderMeaning(meaning);
+  await renderOrigin(origin);
+  await renderVerification(verification);
 
   await renderDebug({
     sentencesSplit: sentences.length,
@@ -561,10 +584,10 @@ document.getElementById("clearBtn").addEventListener("click", clearAll);
 const languageSelect = document.getElementById("languageSelect");
 if (languageSelect) {
   currentLanguage = languageSelect.value || "en";
-  languageSelect.addEventListener("change", () => {
+  languageSelect.addEventListener("change", async () => {
     currentLanguage = languageSelect.value || "en";
     if (!document.getElementById("results").classList.contains("hidden")) {
-      analyze();
+      await analyze();
     }
   });
 }
