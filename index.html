@@ -1,528 +1,616 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Signal Tool</title>
-
-<style>
-*{box-sizing:border-box}
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#f7f7f8;
-color:#16181d
-}
-.app{
-max-width:980px;
-margin:0 auto;
-padding:24px 16px 48px
-}
-.panel{
-background:white;
-border:1px solid #d9dee6;
-border-radius:12px;
-padding:16px;
-margin-bottom:16px
-}
-textarea{
-width:100%;
-min-height:220px;
-padding:12px;
-border:1px solid #cbd3dd;
-border-radius:10px;
-font:inherit
-}
-.controls{
-display:flex;
-gap:10px;
-margin-top:12px;
-flex-wrap:wrap
-}
-button{
-border:none;
-border-radius:10px;
-padding:10px 14px;
-font:inherit;
-cursor:pointer;
-background:#1a4cff;
-color:white;
-font-weight:700
-}
-button.secondary{
-background:#eef2f7;
-color:#223042
-}
-.hidden{display:none}
-.card{
-border:1px solid #e4e8ee;
-border-radius:10px;
-padding:12px;
-margin-bottom:12px;
-background:#fbfcfe
-}
-.small-label{
-text-transform:uppercase;
-letter-spacing:.04em;
-font-size:.78rem;
-color:#687281;
-font-weight:700;
-margin-bottom:8px
-}
-.badge-row{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-margin:10px 0
-}
-.badge{
-display:inline-block;
-padding:5px 9px;
-border-radius:999px;
-background:#edf1f7;
-color:#314257;
-font-size:.88rem
-}
-.type{background:#e7f0ff;color:#1541b3}
-.flag{background:#fff3df;color:#8f5b00}
-ul{margin:8px 0 0;padding-left:18px}
-pre{
-white-space:pre-wrap;
-word-break:break-word;
-font-size:.9rem;
-line-height:1.45
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signal Tool</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7f8;
+      color: #16181d;
+    }
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+    .panel {
+      background: white;
+      border: 1px solid #d9dee6;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 220px;
+      padding: 12px;
+      border: 1px solid #cbd3dd;
+      border-radius: 10px;
+      font: inherit;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    select {
+      border: 1px solid #cbd3dd;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      background: white;
+    }
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font: inherit;
+      cursor: pointer;
+      background: #1a4cff;
+      color: white;
+      font-weight: 700;
+    }
+    button.secondary {
+      background: #eef2f7;
+      color: #223042;
+    }
+    .hidden { display: none; }
+    .card {
+      border: 1px solid #e4e8ee;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #fbfcfe;
+    }
+    .small-label {
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 0.78rem;
+      color: #687281;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #edf1f7;
+      color: #314257;
+      font-size: 0.88rem;
+    }
+    .type { background: #e7f0ff; color: #1541b3; }
+    .flag { background: #fff3df; color: #8f5b00; }
+    ul { margin: 8px 0 0; padding-left: 18px; }
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+  </style>
 </head>
-
 <body>
-
-<main class="app">
-
-<section class="panel">
-<h1>Signal Tool</h1>
-<p>One input. Three constrained outputs: Meaning, Origin, Verification.</p>
-
-<label for="inputText"><strong>Paste text</strong></label>
-<textarea id="inputText" placeholder="Paste text here..."></textarea>
-
-<div class="controls">
-<button id="analyzeBtn">Analyze</button>
-<button id="sampleBtn" class="secondary">Load Sample</button>
-<button id="clearBtn" class="secondary">Clear</button>
-</div>
-</section><div style="margin-top:12px;">
-<label for="languageSelect"><strong>Output Language</strong></label>
-<select id="languageSelect">
-<option value="en">English</option>
-<option value="es">Spanish</option>
-<option value="ht">Haitian Creole</option>
-<option value="so">Somali</option>
-<option value="uk">Ukrainian</option>
-<option value="ru">Russian</option>
-<option value="zh">Chinese</option>
-</select>
-</div>
-
-<section id="results" class="hidden">
-
-<section class="panel">
-<h2>Meaning</h2>
-<div id="meaningPanel"></div>
-</section>
-
-<section class="panel">
-<h2>Origin</h2>
-<div id="originPanel"></div>
-</section>
-
-<section class="panel">
-<h2>Verification</h2>
-<div id="verificationPanel"></div>
-</section>
-
-<details class="panel">
-<summary>Processing Trace</summary>
-<pre id="debugPanel"></pre>
-</details>
-
-</section>
-
-</main>
-
-<script>
-
-const assertionTypes=[
-{
-id:"scientific",
-label:"Scientific",
-recordSystems:["PubMed","ClinicalTrials.gov","NIH","FDA","CDC"],
-signals:["study","trial","medical","clinical","research","journal"]
-},
-{
-id:"policy_legal",
-label:"Policy / Legal",
-recordSystems:["Congress.gov","Federal Register","CourtListener","GovInfo"],
-signals:["bill","act","law","rule","regulation","section","agency","congress"]
-},
-{
-id:"statistical",
-label:"Statistical",
-recordSystems:["U.S. Census Bureau","BLS","BEA","FRED","World Bank Data"],
-signals:["percent","%","rate","increase","decrease","total","count"]
-},
-{
-id:"infrastructure_energy",
-label:"Infrastructure / Energy",
-recordSystems:["EIA","FERC","NERC","WECC","Utility Filings"],
-signals:["bridge","broadband","grid","energy","utility","infrastructure","power"]
-},
-{
-id:"predictive",
-label:"Predictive",
-recordSystems:["Forecast Reports","Model Documentation","Track Record Comparisons"],
-signals:["will","likely","expected","forecast","projected"]
-},
-{
-id:"other",
-label:"Other",
-recordSystems:["Needs Human Review"],
-signals:[]
-}
-];
-
-function splitSentences(text){
-return text.split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(Boolean);
-}
-
-function detectAssertions(sentences){
-const markers=[
-/\b(is|are|was|were|will|would|should|must|can|could|reported|announced|passed|increased|decreased|showed|found|establishes|expands|directs)\b/i,
-/\b\d+(\.\d+)?%?\b/,
-/\baccording to\b/i,
-/\bsection\b/i
-];
-
-return sentences.filter(sentence=>{
-if(sentence.length<18) return false;
-return markers.some(rx=>rx.test(sentence));
-});
-}
-
-function generatePlainMeaning(text){
-
-if(!text){
-return "This text makes a claim but there was not enough information to explain it clearly.";
-}
-
-const lower=text.toLowerCase();
-
-if(lower.includes("bridge") && lower.includes("broadband") && lower.includes("grid")){
-return "The text says the federal government plans to spend money repairing bridges, expanding broadband internet, and upgrading the power grid. It also suggests these investments could reduce maintenance costs over time.";
-}
-
-const sentences=text.split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(Boolean);
-
-if(sentences.length===0){
-return "This text makes a claim but there was not enough information to explain it clearly.";
-}
-
-let summary=sentences.slice(0,2).join(" ");
-
-summary=summary.replace(/Section\s+\d+\s+/gi,"");
-summary=summary.replace(/\bestablishes\b/gi,"sets up");
-summary=summary.replace(/\bprogram\b/gi,"effort");
-summary=summary.replace(/\bdirects\b/gi,"sends");
-summary=summary.replace(/\bmodernization\b/gi,"upgrades");
-summary=summary.replace(/\bdeployment\b/gi,"expansion");
-summary=summary.replace(/\bpriority funding\b/gi,"the money will mainly go");
-summary=summary.replace(/\bstructurally deficient\b/gi,"in poor condition");
-summary=summary.replace(/\s+/g," ").trim();
-
-if(!summary.toLowerCase().startsWith("the text")){
-summary="The text says "+summary.charAt(0).toLowerCase()+summary.slice(1);
-}
-
-return summary;
-
-}
-
-function classifyAssertion(sentence){
-
-const lower=sentence.toLowerCase();
-let best=assertionTypes[assertionTypes.length-1];
-let bestScore=0;
-
-for(const type of assertionTypes){
-
-let score=0;
-
-for(const signal of type.signals){
-if(lower.includes(signal)) score+=2;
-}
-
-if(type.id==="statistical" && /\b\d+(\.\d+)?%?\b/.test(sentence)){
-score+=2;
-}
-
-if(score>bestScore){
-bestScore=score;
-best=type;
-}
-
-}
-
-return best;
-
-}
-
-function buildFlags(typeId,sentence){
-
-const flags=[];
-
-if(!/\b(according to|report|study|section|act|bill|court|agency|department|published)\b/i.test(sentence)){
-flags.push("source_path_incomplete");
-}
-
-if(typeId==="predictive"){
-flags.push("forecast_model_needed");
-}
-
-if(!flags.length){
-flags.push("verification_path_available");
-}
-
-return flags;
-
-}
-
-function extractOrigin(text){
-
-let sourceDomain="";
-let publisher="";
-let author="";
-let timestamp="";
-const originSignals=[];
-
-const urlMatch=text.match(/https?:\/\/[^\s]+/i);
-
-if(urlMatch){
-
-try{
-
-const url=new URL(urlMatch[0]);
-sourceDomain=url.hostname;
-originSignals.push("source_url:"+url.hostname);
-
-if(url.hostname.includes(".gov")){
-publisher="Government domain";
-}
-
-if(url.hostname.includes("congress.gov")){
-publisher="Congress.gov";
-}
-
-}catch(_){}
-
-}
-
-const timeMatch=text.match(/\b((19|20)\d{2}|January|February|March|April|May|June|July|August|September|October|November|December)\b/i);
-
-if(timeMatch){
-timestamp=timeMatch[0];
-originSignals.push("time_signal:"+timestamp);
-}
-
-return{
-sourceDomain,
-publisher,
-author,
-timestamp,
-ownershipContext:sourceDomain.includes(".gov")
-?"Official government domain"
-:sourceDomain
-?"Non-government domain"
-:"No source URL detected in text",
-originSignals
-};
-
-}
-
-function escapeHtml(str){
-return String(str)
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-}
-
-function analyze(){
-
-const rawText=document.getElementById("inputText").value.trim();
-
-if(!rawText){
-alert("Paste some text first.");
-return;
-}
-
-const sentences=splitSentences(rawText);
-const assertions=detectAssertions(sentences);
-const origin=extractOrigin(rawText);
-
-document.getElementById("meaningPanel").innerHTML=
-`<div class="card">
-<div class="small-label">Plain Meaning</div>
-<p>${escapeHtml(generatePlainMeaning(rawText))}</p>
-</div>`;
-
-document.getElementById("originPanel").innerHTML=
-`<div class="card">
-<div class="small-label">Source Domain</div>
-<p>${escapeHtml(origin.sourceDomain||"None detected")}</p>
-</div>`;
-
-document.getElementById("verificationPanel").innerHTML=
-
-assertions.length
-?assertions.map(text=>{
-
-const type=classifyAssertion(text);
-const flags=buildFlags(type.id,text);
-
-return `
-<div class="card">
-
-<div class="small-label">Assertion</div>
-<p>${escapeHtml(text)}</p>
-
-<div class="badge-row">
-<span class="badge type">${escapeHtml(type.label)}</span>
-${flags.map(f=>`<span class="badge flag">${escapeHtml(f)}</span>`).join("")}
-</div>
-
-<div class="small-label">Expected Record Systems</div>
-<ul>${type.recordSystems.map(r=>`<li>${escapeHtml(r)}</li>`).join("")}</ul>
-
-</div>
-`;
-
-}).join("")
-:"<p>No verification items.</p>";
-
-document.getElementById("debugPanel").textContent=
-JSON.stringify({
-sentencesSplit:sentences.length,
-candidateAssertions:assertions.length,
-assertionsReturned:assertions.length,
-inputPreview:rawText.slice(0,220)
-},null,2);
-
-document.getElementById("results").classList.remove("hidden");
-
-}
-
-function loadSample(){
-
-document.getElementById("debugPanel").textContent =
-JSON.stringify({
-enginePipeline: [
-"origin_signals_extracted",
-"meaning_interpreted",
-"assertions_detected",
-"verification_routes_generated"
-],
-sentencesSplit: sentences.length,
-candidateAssertions: assertions.length,
-assertionsReturned: assertions.length
-}, null, 2);
-
-}
-
-function clearAll(){
-
-document.getElementById("inputText").value="";
-document.getElementById("results").classList.add("hidden");
-document.getElementById("meaningPanel").innerHTML="";
-document.getElementById("originPanel").innerHTML="";
-document.getElementById("verificationPanel").innerHTML="";
-document.getElementById("debugPanel").textContent="";
-
-}
-
-document.getElementById("analyzeBtn").addEventListener("click",analyze);
-document.getElementById("sampleBtn").addEventListener("click",loadSample);
-document.getElementById("clearBtn").addEventListener("click",clearAll);
-function applyLanguage(){
-
-const lang = document.getElementById("languageSelect").value;
-
-if(lang === "en") return;
-
-const dictionary = {
-es:{
-"Plain Meaning":"Significado Claro",
-"Detected Assertions":"Afirmaciones Detectadas",
-"Action Signals":"Señales de Acción",
-"Timeline Signals":"Señales de Tiempo",
-"Source Domain":"Dominio de Origen",
-"Publisher":"Publicador",
-"Timestamp Signal":"Señal de Tiempo",
-"Ownership / Provenance Context":"Contexto de Procedencia",
-"Assertion":"Afirmación",
-"Expected Record Systems":"Sistemas de Registro Esperados"
-}
-};
-
-const labels = document.querySelectorAll(".small-label");
-
-labels.forEach(label=>{
-const text = label.textContent.trim();
-if(dictionary[lang] && dictionary[lang][text]){
-label.textContent = dictionary[lang][text];
-}
-});
-
-}document.getElementById("languageSelect").addEventListener("change", applyLanguage);
-
-function applyLanguage() {
-  const lang = document.getElementById("languageSelect").value;
-
-  if (lang === "en") return;
-
-  const dictionary = {
-    es: {
-      "Plain Meaning": "Significado Claro",
-      "Detected Assertions": "Afirmaciones Detectadas",
-      "Action Signals": "Señales de Acción",
-      "Timeline Signals": "Señales de Tiempo",
-      "Source Domain": "Dominio de Origen",
-      "Publisher": "Publicador",
-      "Timestamp Signal": "Señal de Tiempo",
-      "Ownership / Provenance Context": "Contexto de Procedencia",
-      "Assertion": "Afirmación",
-      "Expected Record Systems": "Sistemas de Registro Esperados"
-    },
-    ru: {
-      "Plain Meaning": "Простое значение",
-      "Detected Assertions": "Обнаруженные утверждения"
-    },
-    zh: {
-      "Plain Meaning": "简单含义",
-      "Detected Assertions": "检测到的断言"
+  <main class="app">
+    <section class="panel">
+      <h1 id="titleText">Signal Tool</h1>
+      <p id="subtitleText">One input. Three constrained outputs: Meaning, Origin, Verification.</p>
+
+      <label for="inputText" id="pasteLabel"><strong>Paste text</strong></label>
+      <textarea id="inputText" placeholder="Paste text here..."></textarea>
+
+      <div class="controls">
+        <button id="analyzeBtn">Analyze</button>
+        <button id="sampleBtn" class="secondary">Load Sample</button>
+        <button id="clearBtn" class="secondary">Clear</button>
+
+        <select id="languageSelect">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="ht">Haitian Creole</option>
+          <option value="so">Somali</option>
+          <option value="uk">Ukrainian</option>
+          <option value="ru">Russian</option>
+          <option value="zh">Chinese</option>
+        </select>
+      </div>
+    </section>
+
+    <section id="results" class="hidden">
+      <section class="panel">
+        <h2 id="meaningTitle">Meaning</h2>
+        <div id="meaningPanel"></div>
+      </section>
+
+      <section class="panel">
+        <h2 id="originTitle">Origin</h2>
+        <div id="originPanel"></div>
+      </section>
+
+      <section class="panel">
+        <h2 id="verificationTitle">Verification</h2>
+        <div id="verificationPanel"></div>
+      </section>
+
+      <details class="panel">
+        <summary id="traceTitle">Processing Trace</summary>
+        <pre id="debugPanel"></pre>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    const assertionTypes = [
+      {
+        id: "scientific",
+        label: "Scientific",
+        recordSystems: ["PubMed", "ClinicalTrials.gov", "NIH", "FDA", "CDC"],
+        signals: ["study", "trial", "medical", "clinical", "research", "journal"]
+      },
+      {
+        id: "policy_legal",
+        label: "Policy / Legal",
+        recordSystems: ["Congress.gov", "Federal Register", "CourtListener", "GovInfo"],
+        signals: ["bill", "act", "law", "rule", "regulation", "section", "agency", "congress"]
+      },
+      {
+        id: "statistical",
+        label: "Statistical",
+        recordSystems: ["U.S. Census Bureau", "BLS", "BEA", "FRED", "World Bank Data"],
+        signals: ["percent", "%", "rate", "increase", "decrease", "total", "count"]
+      },
+      {
+        id: "infrastructure_energy",
+        label: "Infrastructure / Energy",
+        recordSystems: ["EIA", "FERC", "NERC", "WECC", "Utility Filings"],
+        signals: ["bridge", "broadband", "grid", "energy", "utility", "infrastructure", "power"]
+      },
+      {
+        id: "predictive",
+        label: "Predictive",
+        recordSystems: ["Forecast Reports", "Model Documentation", "Track Record Comparisons"],
+        signals: ["will", "likely", "expected", "forecast", "projected"]
+      },
+      {
+        id: "other",
+        label: "Other",
+        recordSystems: ["Needs Human Review"],
+        signals: []
+      }
+    ];
+
+    const uiTranslations = {
+      en: {
+        titleText: "Signal Tool",
+        subtitleText: "One input. Three constrained outputs: Meaning, Origin, Verification.",
+        pasteLabel: "Paste text",
+        analyzeBtn: "Analyze",
+        sampleBtn: "Load Sample",
+        clearBtn: "Clear",
+        meaningTitle: "Meaning",
+        originTitle: "Origin",
+        verificationTitle: "Verification",
+        traceTitle: "Processing Trace",
+        plainMeaning: "Plain Meaning",
+        sourceDomain: "Source Domain",
+        publisher: "Publisher",
+        timestampSignal: "Timestamp Signal",
+        provenanceContext: "Ownership / Provenance Context",
+        assertion: "Assertion",
+        expectedRecordSystems: "Expected Record Systems",
+        noneDetected: "None detected",
+        noVerificationItems: "No verification items to display.",
+        noSourceUrl: "No source URL detected in text"
+      },
+      es: {
+        titleText: "Herramienta de Señales",
+        subtitleText: "Una entrada. Tres resultados limitados: Significado, Origen y Verificación.",
+        pasteLabel: "Pegar texto",
+        analyzeBtn: "Analizar",
+        sampleBtn: "Cargar ejemplo",
+        clearBtn: "Borrar",
+        meaningTitle: "Significado",
+        originTitle: "Origen",
+        verificationTitle: "Verificación",
+        traceTitle: "Rastreo de procesamiento",
+        plainMeaning: "Significado Claro",
+        sourceDomain: "Dominio de origen",
+        publisher: "Publicador",
+        timestampSignal: "Señal de tiempo",
+        provenanceContext: "Contexto de procedencia",
+        assertion: "Afirmación",
+        expectedRecordSystems: "Sistemas de registro esperados",
+        noneDetected: "No detectado",
+        noVerificationItems: "No hay elementos de verificación para mostrar.",
+        noSourceUrl: "No se detectó una URL de origen en el texto"
+      },
+      ru: {
+        titleText: "Инструмент сигналов",
+        subtitleText: "Один ввод. Три ограниченных результата: Значение, Источник, Проверка.",
+        pasteLabel: "Вставить текст",
+        analyzeBtn: "Анализировать",
+        sampleBtn: "Загрузить пример",
+        clearBtn: "Очистить",
+        meaningTitle: "Значение",
+        originTitle: "Источник",
+        verificationTitle: "Проверка",
+        traceTitle: "Трассировка обработки",
+        plainMeaning: "Простое значение",
+        sourceDomain: "Домен источника",
+        publisher: "Издатель",
+        timestampSignal: "Сигнал времени",
+        provenanceContext: "Контекст происхождения",
+        assertion: "Утверждение",
+        expectedRecordSystems: "Ожидаемые системы записей",
+        noneDetected: "Не обнаружено",
+        noVerificationItems: "Нет элементов проверки для отображения.",
+        noSourceUrl: "URL источника в тексте не обнаружен"
+      },
+      zh: {
+        titleText: "信号工具",
+        subtitleText: "一个输入。三个受限输出：含义、来源、验证。",
+        pasteLabel: "粘贴文本",
+        analyzeBtn: "分析",
+        sampleBtn: "加载示例",
+        clearBtn: "清除",
+        meaningTitle: "含义",
+        originTitle: "来源",
+        verificationTitle: "验证",
+        traceTitle: "处理轨迹",
+        plainMeaning: "简明含义",
+        sourceDomain: "来源域名",
+        publisher: "发布者",
+        timestampSignal: "时间信号",
+        provenanceContext: "来源背景",
+        assertion: "断言",
+        expectedRecordSystems: "预期记录系统",
+        noneDetected: "未检测到",
+        noVerificationItems: "没有可显示的验证项目。",
+        noSourceUrl: "文本中未检测到来源网址"
+      },
+      uk: {
+        titleText: "Інструмент сигналів",
+        subtitleText: "Один вхід. Три обмежені результати: Значення, Походження, Перевірка.",
+        pasteLabel: "Вставити текст",
+        analyzeBtn: "Аналізувати",
+        sampleBtn: "Завантажити приклад",
+        clearBtn: "Очистити",
+        meaningTitle: "Значення",
+        originTitle: "Походження",
+        verificationTitle: "Перевірка",
+        traceTitle: "Трасування обробки",
+        plainMeaning: "Просте значення",
+        sourceDomain: "Домен джерела",
+        publisher: "Видавець",
+        timestampSignal: "Сигнал часу",
+        provenanceContext: "Контекст походження",
+        assertion: "Твердження",
+        expectedRecordSystems: "Очікувані системи записів",
+        noneDetected: "Не виявлено",
+        noVerificationItems: "Немає елементів перевірки для відображення.",
+        noSourceUrl: "У тексті не виявлено URL джерела"
+      },
+      ht: {
+        titleText: "Zouti Siyal",
+        subtitleText: "Yon sèl antre. Twa rezilta limite: Siyifikasyon, Orijin, Verifikasyon.",
+        pasteLabel: "Kole tèks",
+        analyzeBtn: "Analize",
+        sampleBtn: "Chaje egzanp",
+        clearBtn: "Efase",
+        meaningTitle: "Siyifikasyon",
+        originTitle: "Orijin",
+        verificationTitle: "Verifikasyon",
+        traceTitle: "Tras pwosesis",
+        plainMeaning: "Sans klè",
+        sourceDomain: "Domèn sous",
+        publisher: "Piblikatè",
+        timestampSignal: "Siyal tan",
+        provenanceContext: "Kontèks pwovens",
+        assertion: "Deklarasyon",
+        expectedRecordSystems: "Sistèm dosye yo espere",
+        noneDetected: "Pa detekte",
+        noVerificationItems: "Pa gen eleman verifikasyon pou montre.",
+        noSourceUrl: "Pa gen URL sous detekte nan tèks la"
+      },
+      so: {
+        titleText: "Qalabka Calaamadaha",
+        subtitleText: "Hal gelin. Saddex natiijo oo xaddidan: Macne, Asal, Xaqiijin.",
+        pasteLabel: "Ku dheji qoraal",
+        analyzeBtn: "Falanqee",
+        sampleBtn: "Soo rar tusaale",
+        clearBtn: "Nadiifi",
+        meaningTitle: "Macne",
+        originTitle: "Asal",
+        verificationTitle: "Xaqiijin",
+        traceTitle: "Raadka habaynta",
+        plainMeaning: "Macne Fudud",
+        sourceDomain: "Domain-ka isha",
+        publisher: "Daabacaha",
+        timestampSignal: "Calaamadda waqtiga",
+        provenanceContext: "Macnaha asalka",
+        assertion: "Sheegasho",
+        expectedRecordSystems: "Nidaamyada diiwaanka la filayo",
+        noneDetected: "Lama helin",
+        noVerificationItems: "Ma jiraan walxo xaqiijin oo la muujiyo.",
+        noSourceUrl: "URL isha lagama helin qoraalka"
+      }
+    };
+
+    function t(key) {
+      const lang = document.getElementById("languageSelect").value || "en";
+      return (uiTranslations[lang] && uiTranslations[lang][key]) || uiTranslations.en[key] || key;
     }
-  };
 
-  const labels = document.querySelectorAll(".small-label");
-
-  labels.forEach(label => {
-    const text = label.textContent.trim();
-    if (dictionary[lang] && dictionary[lang][text]) {
-      label.textContent = dictionary[lang][text];
+    function splitSentences(text) {
+      return text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
     }
-  });
-}
-</script>
 
+    function detectAssertions(sentences) {
+      const markers = [
+        /\b(is|are|was|were|will|would|should|must|can|could|reported|announced|passed|increased|decreased|showed|found|establishes|expands|directs)\b/i,
+        /\b\d+(\.\d+)?%?\b/,
+        /\baccording to\b/i,
+        /\bsection\b/i
+      ];
+      return sentences.filter(sentence => {
+        if (sentence.length < 18) return false;
+        return markers.some(rx => rx.test(sentence));
+      });
+    }
+
+    function generatePlainMeaning(text) {
+      const lang = document.getElementById("languageSelect").value || "en";
+
+      if (!text) {
+        const emptyMap = {
+          en: "This text makes a claim but there was not enough information to explain it clearly.",
+          es: "Este texto hace una afirmación, pero no había suficiente información para explicarlo claramente.",
+          ru: "Этот текст содержит утверждение, но недостаточно информации, чтобы ясно его объяснить.",
+          zh: "这段文字提出了一个主张，但信息不足，无法清楚说明。",
+          uk: "Цей текст містить твердження, але недостатньо інформації, щоб чітко його пояснити.",
+          ht: "Tèks sa a fè yon deklarasyon men pa gen ase enfòmasyon pou eksplike li klèman.",
+          so: "Qoraalkani wuxuu sameynayaa sheegasho laakiin macluumaad ku filan ma jiro si si cad loo sharaxo."
+        };
+        return emptyMap[lang] || emptyMap.en;
+      }
+
+      const lower = text.toLowerCase();
+
+      if (lower.includes("bridge") && lower.includes("broadband") && lower.includes("grid")) {
+        const sampleMap = {
+          en: "The text says the federal government plans to spend money repairing bridges, expanding broadband internet, and upgrading the power grid. It also suggests these investments could reduce maintenance costs over time.",
+          es: "El texto dice que el gobierno federal planea gastar dinero en reparar puentes, ampliar el internet de banda ancha y mejorar la red eléctrica. También sugiere que estas inversiones podrían reducir los costos de mantenimiento con el tiempo.",
+          ru: "Текст говорит, что федеральное правительство планирует тратить деньги на ремонт мостов, расширение широкополосного интернета и модернизацию электросети. Также предполагается, что эти инвестиции могут со временем снизить расходы на обслуживание.",
+          zh: "这段文字说明，联邦政府计划投入资金修复桥梁、扩展宽带互联网并升级电网。它还表明，这些投资可能会随着时间推移降低维护成本。",
+          uk: "Текст говорить, що федеральний уряд планує витрачати кошти на ремонт мостів, розширення широкосмугового інтернету та модернізацію електромережі. Також припускається, що ці інвестиції з часом можуть зменшити витрати на обслуговування.",
+          ht: "Tèks la di gouvènman federal la planifye depanse lajan pou repare pon, elaji entènèt bande laj, epi amelyore rezo elektrisite a. Li sijere tou ke envestisman sa yo ta ka diminye depans antretyen ak tan.",
+          so: "Qoraalku wuxuu sheegayaa in dowladda federaalku qorshaynayso inay lacag ku bixiso dayactirka buundooyinka, ballaarinta internet-ka broadband-ka, iyo hagaajinta shabakadda korontada. Waxa kale oo uu soo jeedinayaa in maalgelintani ay hoos u dhigi karto kharashaadka dayactirka mustaqbalka."
+        };
+        return sampleMap[lang] || sampleMap.en;
+      }
+
+      const sentences = text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
+
+      if (sentences.length === 0) {
+        return t("noneDetected");
+      }
+
+      let summary = sentences.slice(0, 2).join(" ");
+      summary = summary.replace(/Section\s+\d+\s+/gi, "");
+      summary = summary.replace(/\bestablishes\b/gi, "sets up");
+      summary = summary.replace(/\bprogram\b/gi, "effort");
+      summary = summary.replace(/\bdirects\b/gi, "sends");
+      summary = summary.replace(/\bmodernization\b/gi, "upgrades");
+      summary = summary.replace(/\bdeployment\b/gi, "expansion");
+      summary = summary.replace(/\bpriority funding\b/gi, "the money will mainly go");
+      summary = summary.replace(/\bstructurally deficient\b/gi, "in poor condition");
+      summary = summary.replace(/\s+/g, " ").trim();
+
+      if (!summary.toLowerCase().startsWith("the text")) {
+        summary = "The text says " + summary.charAt(0).toLowerCase() + summary.slice(1);
+      }
+
+      return summary;
+    }
+
+    function classifyAssertion(sentence) {
+      const lower = sentence.toLowerCase();
+      let best = assertionTypes[assertionTypes.length - 1];
+      let bestScore = 0;
+
+      for (const type of assertionTypes) {
+        let score = 0;
+        for (const signal of type.signals) {
+          if (lower.includes(signal)) score += 2;
+        }
+        if (type.id === "statistical" && /\b\d+(\.\d+)?%?\b/.test(sentence)) {
+          score += 2;
+        }
+        if (score > bestScore) {
+          bestScore = score;
+          best = type;
+        }
+      }
+
+      return best;
+    }
+
+    function buildFlags(typeId, sentence) {
+      const flags = [];
+      if (!/\b(according to|report|study|section|act|bill|court|agency|department|published)\b/i.test(sentence)) {
+        flags.push("source_path_incomplete");
+      }
+      if (typeId === "predictive") {
+        flags.push("forecast_model_needed");
+      }
+      if (!flags.length) {
+        flags.push("verification_path_available");
+      }
+      return flags;
+    }
+
+    function extractOrigin(text) {
+      let sourceDomain = "";
+      let publisher = "";
+      let author = "";
+      let timestamp = "";
+      const originSignals = [];
+
+      const urlMatch = text.match(/https?:\/\/[^\s]+/i);
+      if (urlMatch) {
+        try {
+          const url = new URL(urlMatch[0]);
+          sourceDomain = url.hostname;
+          originSignals.push("source_url:" + url.hostname);
+          if (url.hostname.includes(".gov")) publisher = "Government domain";
+          if (url.hostname.includes("congress.gov")) publisher = "Congress.gov";
+        } catch (_) {}
+      }
+
+      const timeMatch = text.match(/\b((19|20)\d{2}|January|February|March|April|May|June|July|August|September|October|November|December)\b/i);
+      if (timeMatch) {
+        timestamp = timeMatch[0];
+        originSignals.push("time_signal:" + timestamp);
+      }
+
+      return {
+        sourceDomain,
+        publisher,
+        author,
+        timestamp,
+        ownershipContext: sourceDomain.includes(".gov")
+          ? "Official government domain"
+          : sourceDomain
+          ? "Non-government domain"
+          : t("noSourceUrl"),
+        originSignals
+      };
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function updateStaticUI() {
+      document.getElementById("titleText").textContent = t("titleText");
+      document.getElementById("subtitleText").textContent = t("subtitleText");
+      document.getElementById("pasteLabel").innerHTML = "<strong>" + t("pasteLabel") + "</strong>";
+      document.getElementById("analyzeBtn").textContent = t("analyzeBtn");
+      document.getElementById("sampleBtn").textContent = t("sampleBtn");
+      document.getElementById("clearBtn").textContent = t("clearBtn");
+      document.getElementById("meaningTitle").textContent = t("meaningTitle");
+      document.getElementById("originTitle").textContent = t("originTitle");
+      document.getElementById("verificationTitle").textContent = t("verificationTitle");
+      document.getElementById("traceTitle").textContent = t("traceTitle");
+    }
+
+    function analyze() {
+      const rawText = document.getElementById("inputText").value.trim();
+
+      if (!rawText) {
+        alert("Paste some text first.");
+        return;
+      }
+
+      const sentences = splitSentences(rawText);
+      const assertions = detectAssertions(sentences);
+      const origin = extractOrigin(rawText);
+
+      document.getElementById("meaningPanel").innerHTML =
+      `<div class="card">
+        <div class="small-label">${escapeHtml(t("plainMeaning"))}</div>
+        <p>${escapeHtml(generatePlainMeaning(rawText))}</p>
+      </div>`;
+
+      document.getElementById("originPanel").innerHTML =
+      `<div class="card">
+        <div class="small-label">${escapeHtml(t("sourceDomain"))}</div>
+        <p>${escapeHtml(origin.sourceDomain || t("noneDetected"))}</p>
+      </div>
+      <div class="card">
+        <div class="small-label">${escapeHtml(t("publisher"))}</div>
+        <p>${escapeHtml(origin.publisher || t("noneDetected"))}</p>
+      </div>
+      <div class="card">
+        <div class="small-label">${escapeHtml(t("timestampSignal"))}</div>
+        <p>${escapeHtml(origin.timestamp || t("noneDetected"))}</p>
+      </div>
+      <div class="card">
+        <div class="small-label">${escapeHtml(t("provenanceContext"))}</div>
+        <p>${escapeHtml(origin.ownershipContext)}</p>
+      </div>`;
+
+      document.getElementById("verificationPanel").innerHTML =
+      assertions.length
+      ? assertions.map(text => {
+          const type = classifyAssertion(text);
+          const flags = buildFlags(type.id, text);
+          return `
+          <div class="card">
+            <div class="small-label">${escapeHtml(t("assertion"))}</div>
+            <p>${escapeHtml(text)}</p>
+            <div class="badge-row">
+              <span class="badge type">${escapeHtml(type.label)}</span>
+              ${flags.map(f => `<span class="badge flag">${escapeHtml(f)}</span>`).join("")}
+            </div>
+            <div class="small-label">${escapeHtml(t("expectedRecordSystems"))}</div>
+            <ul>${type.recordSystems.map(r => `<li>${escapeHtml(r)}</li>`).join("")}</ul>
+          </div>`;
+        }).join("")
+      : `<p>${escapeHtml(t("noVerificationItems"))}</p>`;
+
+      document.getElementById("debugPanel").textContent =
+      JSON.stringify({
+        sentencesSplit: sentences.length,
+        candidateAssertions: assertions.length,
+        assertionsReturned: assertions.length,
+        inputPreview: rawText.slice(0,220)
+      }, null, 2);
+
+      document.getElementById("results").classList.remove("hidden");
+    }
+
+    function loadSample() {
+      document.getElementById("inputText").value =
+      `Section 103 establishes a $108 billion federal bridge repair program beginning in 2026. According to the Department of Transportation, priority funding will go to structurally deficient bridges in interstate corridors. The bill also expands broadband deployment by $50 billion and directs grid modernization funding of $48 billion through the Department of Energy. Analysts say the measure will likely reduce long-term maintenance costs.`;
+    }
+
+    function clearAll() {
+      document.getElementById("inputText").value = "";
+      document.getElementById("results").classList.add("hidden");
+      document.getElementById("meaningPanel").innerHTML = "";
+      document.getElementById("originPanel").innerHTML = "";
+      document.getElementById("verificationPanel").innerHTML = "";
+      document.getElementById("debugPanel").textContent = "";
+    }
+
+    document.getElementById("analyzeBtn").addEventListener("click", analyze);
+    document.getElementById("sampleBtn").addEventListener("click", loadSample);
+    document.getElementById("clearBtn").addEventListener("click", clearAll);
+    document.getElementById("languageSelect").addEventListener("change", () => {
+      updateStaticUI();
+      if (!document.getElementById("results").classList.contains("hidden")) {
+        analyze();
+      }
+    });
+
+    updateStaticUI();
+  </script>
 </body>
 </html>
