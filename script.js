@@ -506,9 +506,18 @@ async function analyze() {
   let origin = extractOrigin(input.rawText);
   let verification = runVerification(assertionTexts, library);
 
-  meaning = await localizeMeaning(meaning);
-  origin = await localizeOrigin(origin);
-  verification = await localizeVerification(verification);
+  // translate meaning
+meaning.plainMeaning = await translateText(meaning.plainMeaning);
+meaning.assertions = await translateList(meaning.assertions);
+meaning.actions = await translateList(meaning.actions);
+
+// translate verification
+verification = await localizeVerification(verification);
+
+// translate origin
+origin.publisher = await translateText(origin.publisher);
+origin.ownershipContext = await translateText(origin.ownershipContext);
+  
 
   renderMeaning(meaning);
   renderOrigin(origin);
