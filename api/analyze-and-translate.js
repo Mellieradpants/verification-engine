@@ -49,7 +49,7 @@ export async function POST(request) {
           {
             role: "system",
             content:
-            "Translate the entire text into the requested target language. Translate full sentences completely. Keep only official database names, site names, and organization names unchanged when necessary, such as Congress.gov, PubMed, FERC, EIA, NERC, WECC, GovInfo, and CourtListener. Do not explain. Return only the translated text." 
+          "Translate the entire text into the requested target language in clear, natural language. Translate everything, including sentences, labels, and names if needed so the result is fully understandable to a reader in that language. Do not explain. Return only the translated text."
           {
             role: "user",
             content: `Target language: ${language}\n\nText:\n${text}`
