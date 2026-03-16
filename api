@@ -1,1 +1,43 @@
+export default async function handler(req, res) {
+  try {
+    const { text, language } = req.body;
 
+    if (!text) {
+      return res.status(400).json({ error: "No text provided" });
+    }
+
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content:
+              "Translate the provided text into the requested language. Preserve meaning clearly and neutrally."
+          },
+          {
+            role: "user",
+            content: `Language: ${language}\n\nText:\n${text}`
+          }
+        ],
+        temperature: 0.2
+      })
+    });
+
+    const data = await response.json();
+
+    const translated = data.choices?.[0]?.message?.content || text;
+
+    res.status(200).json({ translated });
+
+  } catch (error) {
+    res.status(500).json({ error: "Translation failed" });
+  }
+}
