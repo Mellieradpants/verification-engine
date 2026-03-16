@@ -1,85 +1,37 @@
 Verification engine
+ 
+ This prototype analyzes a piece of text through three constrained layers designed to prevent interpretive drift in high-context environments.
 
-A human-readable prototype verification engine for complex information.
+Processing layers
 
-This tool is designed to reduce cognitive load by running one piece of text through three constrained checks:
+Meaning
+Translates dense or technical language into clear plain meaning.
 
-- Meaning  
-  What the text is actually saying in plain language.
+Origin
+Identifies observable provenance signals such as domain, publisher context, and source indicators.
 
-- Origin  
-  Where the information appears to come from.
+Verification
+Detects assertions and routes them toward the record systems where supporting evidence should exist.
 
-- Verification  
-  Where supporting records should exist if the claims are grounded.
+Output
 
-The goal is not to generate opinions, personality, or narrative.  
-The goal is to make information easier to inspect.
+The system returns structured results showing:
 
-## What it does
+• plain-language meaning
+• origin signals
+• detected assertions
+• expected verification record systems
+• processing trace data
 
-A user pastes text into the tool.
+Use environments
 
-The system then:
+• education and academic research
+• government and civic information systems
+• journalism and public records analysis
+• legal and policy review
+• multilingual access and translation support
 
-1. detects the main assertions in the text  
-2. rewrites the content in plain, readable language  
-3. surfaces source and provenance signals  
-4. routes each assertion toward the record systems where verification should exist
+Design principle
 
-## Why it exists
-
-A lot of important information is technically public but still hard to use.
-
-People run into:
-- dense policy language
-- unclear source signals
-- no obvious path for verification
-- too much noise and not enough structure
-
-This prototype is meant to help close that gap.
-
-## Design principles
-
-- human-readable output
-- plain language first
-- no narrative padding
-- no personality layer
-- no truth theater
-- no vague “reputable sources” language
-- named record systems whenever possible
-- clear separation between mechanisms
-
-## Current structure
-
-This prototype currently shows three panels:
-
-- Meaning
-- Origin
-- Verification
-
-These are meant to work as one pipeline, not as three unrelated demos.
-
-## Important note
-
-This is a prototype verification engine.
-
-It does not make final truth judgments.  
-It shows:
-- what the text is asserting
-- where it appears to come from
-- where supporting records should exist
-
-## Long-term direction
-
-This prototype is part of a broader constrained AI tool design focused on:
-
-- lower cognitive load
-- better public information access
-- structured language interpretation
-- source traceability
-- verification routing
-
-## Status
-
-Prototype in active development.
+The system does not determine truth.
+It exposes structural signals so users can verify claims through primary record systems.
